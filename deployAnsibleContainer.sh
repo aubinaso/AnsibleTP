@@ -80,6 +80,12 @@ createAnsible(){
   done
   mkdir -p $ANSIBLE_DIR/host_vars
   mkdir -p $ANSIBLE_DIR/group_vars
+  mkdir -p $ANSIBLE_DIR/roles
+  touch $ANSIBLE_DIR/ansible.cfg
+  echo "[defaults]" > $ANSIBLE_DIR/ansible.cfg
+  echo "inventory = ./00_inventory.yml" >> $ANSIBLE_DIR/ansible.cfg
+  echo "roles_path = ./roles" >> $ANSIBLE_DIR/ansible.cfg
+  echo "ansible_python_interpreter = /usr/bin/python3" >> $ANSIBLE_DIR/ansible.cfg
 	echo ""
 }
 
