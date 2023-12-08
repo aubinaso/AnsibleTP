@@ -1,0 +1,19 @@
+---
+# defaults file for roles/commun
+madiawiki_db_user: "mediawiki"
+mediawiki_db_name: "mediawiki"
+mediawiki_db_password: "mediawiki" # ceci est à configurer
+
+mediawiki_admin_user: "admin"
+mediawiki_admin_password: "admin" # ceci est à configurer
+
+mediawiki_name: "mediawiki"
+mediawiki_title: "Mon super mediawiki !" # ceci est à configurer
+
+mediawiki_directory: "/var/www/html/{{ mediawiki_name }}"
+
+mediawiki_maintenance_directory: "{{ mediawiki_directory }}/maintenance"
+
+mediawiki_db_host: "{{ groups['mariadb'][0] }}" # ceci est à remplace par le nom du groupe de base de données
+
+mediawiki_archive_url: "https://releases.wikimedia.org/mediawiki/1.35/mediawiki-1.37.1.tar.gz"

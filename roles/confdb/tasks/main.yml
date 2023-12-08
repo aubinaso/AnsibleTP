@@ -1,0 +1,15 @@
+---
+# tasks file for roles/confdb
+- name: mediawiki database creation
+  mysql_db:
+    name: "{{ mediawiki_db_name }}"
+    state: present
+
+- name: mediawiki user creation and privileges
+  mysql_user:
+    name: "{{ mediawiki_db_user }}"
+    password: "{{ mediawiki_db_password }}"
+    priv: "{{ mediawiki_db_name }}.*:ALL"
+    state: present
+    host: "{{ item }}"
+    with_items: "{{ groups.apache }}" # à configurer

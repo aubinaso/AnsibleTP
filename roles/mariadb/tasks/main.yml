@@ -1,0 +1,15 @@
+---
+# tasks file for roles/mariadb
+- name: Installation des paquets mariadb
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items: "{{ mariadb_packages }}"
+  notify:
+    - restart mariadb
+
+- name: Configuration du serveur mariadb
+  command: /usr/bin/sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
+  notify:
+    - restart mariadb

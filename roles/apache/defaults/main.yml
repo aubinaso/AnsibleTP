@@ -1,0 +1,9 @@
+---
+# defaults file for roles/apache
+php_packages:
+  - php
+  - php-mysql
+  - php-mbstring
+  - php-gd
+  - php-intl
+  - php-xml

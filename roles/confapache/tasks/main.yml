@@ -1,0 +1,53 @@
+---
+# tasks file for roles/confapache
+- name: mediawiki directory
+  file:
+    path: "{{ mediawiki_directory }}"
+    state: directory
+    owner: "www-data"
+    group: "www-data"
+
+- name: mediawiki archive download
+  unarchive:
+    src: "{{ mediawiki_archive_url }}"
+    dest: "{{ mediawiki_directory }}"
+    remote_src: yes
+    owner: "www-data"
+    group: "www-data"
+    extra_opts: --transform='s/mediawiki-[0-9\.]*\///
+
+- name: add g+w sur le repertoire mediawiki
+  command: "chmod -R g+w {{ mediawiki_directory }}"
+
+- name: mediawiki config file
+  become: yes
+  args:
+    chdir: "{{ mediawiki_maintenance_directory }}"
+    creates: "{{ mediawiki_directory }}/LocalSettings.php"
+  command:
+    php install.php
+      --dbname "{{ mediawiki_db_name }}"
+      --dbserver "{{ mediawiki_db_host }}"
+      --dbuser "{{ mediawiki_db_user }}"
+      --dbpass "{{ mediawiki_db_password }}"
+      --installdbuser "{{ mediawiki_db_user }}"
+      --installdbpass "{{ mediawiki_db_password }}"
+      --server "http://{{ ansible_fqdn }}"
+      --scriptpath "/{{ mediawiki_name }}"
+      --lang "fr"
+      --pass "{{ mediawiki_db_password }}"
+      "{{ mediawiki_title }}"
+      "{{ mediawiki_admin_user }}"
+  run_once: yes
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups.apache }}"
+
+- name: mediawiki db update
+  become: yes
+  command:
+    php update.php --quick
+  args:
+    chdir: "{{ mediawiki_maintenance_directory }}"
+  run_once: yes
+  register: resultat
+  changed_when: "' ...done." in resultat.stdout

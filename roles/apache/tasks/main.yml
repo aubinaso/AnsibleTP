@@ -1,0 +1,18 @@
+---
+# tasks file for roles/apache
+- name: Installation du packet Apache
+  apt:
+    name: apache2
+    state: latest
+    update_cache: yes
+  notify:
+    - restart apache2
+
+- name: Install PHP packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items: "{{ php_packages }}"
+  notify:
+    - restart apache2
