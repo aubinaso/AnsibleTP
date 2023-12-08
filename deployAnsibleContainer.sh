@@ -71,22 +71,32 @@ createAnsible(){
 	echo ""
   	ANSIBLE_DIR="ansible_dir"
   	mkdir -p $ANSIBLE_DIR
+	mkdir -p $ANSIBLE_DIR/host_vars
+  	mkdir -p $ANSIBLE_DIR/group_vars
+  	mkdir -p $ANSIBLE_DIR/roles
+  	touch $ANSIBLE_DIR/ansible.cfg
   	echo "all:" > $ANSIBLE_DIR/00_inventory.yml
 	echo "  vars:" >> $ANSIBLE_DIR/00_inventory.yml
     echo "    ansible_python_interpreter: /usr/bin/python3" >> $ANSIBLE_DIR/00_inventory.yml
-  echo "  hosts:" >> $ANSIBLE_DIR/00_inventory.yml
-  for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do      
-    docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
-  done
-  mkdir -p $ANSIBLE_DIR/host_vars
-  mkdir -p $ANSIBLE_DIR/group_vars
-  mkdir -p $ANSIBLE_DIR/roles
-  touch $ANSIBLE_DIR/ansible.cfg
-  echo "[defaults]" > $ANSIBLE_DIR/ansible.cfg
-  echo "inventory = ./00_inventory.yml" >> $ANSIBLE_DIR/ansible.cfg
-  echo "roles_path = ./roles" >> $ANSIBLE_DIR/ansible.cfg
-  echo "ansible_python_interpreter = /usr/bin/python3" >> $ANSIBLE_DIR/ansible.cfg
-	echo ""
+  	echo "  hosts:" >> $ANSIBLE_DIR/00_inventory.yml
+	value=0
+  	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
+		value=$(($value + 1))
+		echo "    $USER-debian-$value:" >> $ANSIBLE_DIR/00_inventory.yml
+		mkdir -p $ANSIBLE_DIR/host_vars/$USER-debian-$value
+    	#docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
+		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
+		echo "ansible_user: $USER" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
+  	done
+  	mkdir -p $ANSIBLE_DIR/host_vars
+  	mkdir -p $ANSIBLE_DIR/group_vars
+  	mkdir -p $ANSIBLE_DIR/roles
+  	touch $ANSIBLE_DIR/ansible.cfg
+  	echo "[defaults]" > $ANSIBLE_DIR/ansible.cfg
+  	echo "inventory = ./00_inventory.yml" >> $ANSIBLE_DIR/ansible.cfg
+  	echo "roles_path = ./roles" >> $ANSIBLE_DIR/ansible.cfg
+  	echo "ansible_python_interpreter = /usr/bin/python3" >> $ANSIBLE_DIR/ansible.cfg
+  	echo ""
 }
 
 
