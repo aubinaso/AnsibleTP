@@ -1,7 +1,6 @@
 #!/bin/bash
 # Functions #########################################################
 
-
 help(){
 echo "
 
@@ -18,7 +17,6 @@ Options :
 
 "
 }
-
 
 createNodes() {
 	# définition du nombre de conteneur
@@ -97,7 +95,6 @@ createAnsible(){
   	echo ""
 }
 
-
 infosNodes(){
 	echo ""
 	echo "Informations des conteneurs : "
@@ -108,9 +105,7 @@ infosNodes(){
 	echo ""
 }
 
-
-# Let's Go !!! ###################################################################""
-
+# Let's Go !!! #######################################################
 
 #si option --create
 if [ "$1" == "--create" ];then
