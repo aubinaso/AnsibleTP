@@ -4,4 +4,14 @@
   - name: Afficher le hostname
     debug:
       msg: "Le hostname est {{ inventory_hostname }}"
+
+- name: Create a directory
+  hosts: all
+  tasks:
+  - name: Create a directory
+    file:
+      path: "/home/{{ myuser }}/myDir"
+      state: directory
+      mode: 0755
+      owner: "{{ myuser }}"
   
