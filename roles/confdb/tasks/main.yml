@@ -5,11 +5,21 @@
     name: "{{ mediawiki_db_name }}"
     state: present
 
+- name: afficher
+  debug:
+    msg: "{{ item }}"
+  with_items:
+  - "{{ groups['apache'] | map('extract', hostvars, ['ansible_host']) }}"
+  - "{{ groups['mariadb'] | map('extract', hostvars, ['ansible_host']) }}"
+
 - name: mediawiki user creation and privileges
   mysql_user:
     name: "{{ mediawiki_db_user }}"
     password: "{{ mediawiki_db_password }}"
-    priv: "{{ mediawiki_db_name }}.*:ALL"
+    #priv: "{{ mediawiki_db_name }}.*:ALL"
+    priv: "*.*:ALL"
     state: present
     host: "{{ item }}"
-  with_items: "{{ groups.apache }}" # à configurer
+  with_items:
+  - "{{ groups['apache'] | map('extract', hostvars, ['ansible_host']) }}"
+  - "{{ groups['mariadb'] | map('extract', hostvars, ['ansible_host']) }}"

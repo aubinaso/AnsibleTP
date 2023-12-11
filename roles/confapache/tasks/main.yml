@@ -16,15 +16,20 @@
     group: "www-data"
     #extra_opts: --transform='s/mediawiki-[0-9\.]*\///
 
-- name: mediawiki create directory
+- name: mediawiki modify directory
+  shell: 
+    cmd: "{{ item }}"
+  with_items:
+    - "mkdir {{ mediawiki_directory }}"
+    - "cp -r {{ apache_dir }}/mediawiki-1.37.1/* {{ mediawiki_directory }}"
+
+- name: mediawiki rigths to www-data
   file:
     path: "{{ mediawiki_directory }}"
     state: directory
     owner: "www-data"
     group: "www-data"
-
-- name: mediawiki modify directory
-  command: "cp -r {{ apache_dir }}/mediawiki-1.37.1/* {{ mediawiki_directory }}"
+    recurse: yes
 
 - name: add g+w sur le repertoire mediawiki
   command: "chmod -R g+w {{ mediawiki_directory }}"
