@@ -39,14 +39,14 @@ createNodes() {
 	# lancement des conteneurs
 	for i in $(seq $min $max);do
 		docker run -tid --privileged --publish-all=true -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
-		docker exec -ti $USER-debian-$i /bin/bash -c "useradd -m -p sa3tHJ3/KuYvI $USER"
-        docker exec -ti $mainuser-debian-$i /bin/bash -c "sed -i 's/#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config"
-        docker exec -ti $mainuser-debian-$i /bin/bash -c "sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config"
-		docker exec -ti $USER-debian-$i /bin/bash -c "mkdir  ${HOME}/.ssh && chmod 700 ${HOME}/.ssh && chown $USER:$USER $HOME/.ssh"
+		docker exec -ti $USER-debian-$i bash -c "useradd -m -p sa3tHJ3/KuYvI $USER"
+        docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config"
+        docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config"
+		docker exec -ti $USER-debian-$i bash -c "mkdir  ${HOME}/.ssh && chmod 700 ${HOME}/.ssh && chown $USER:$USER $HOME/.ssh"
 	    docker cp $HOME/.ssh/id_rsa.pub $USER-debian-$i:$HOME/.ssh/authorized_keys
-	    docker exec -ti $USER-debian-$i /bin/bash -c "chmod 600 ${HOME}/.ssh/authorized_keys && chown $USER:$USER $HOME/.ssh/authorized_keys"
-		docker exec -ti $USER-debian-$i /bin/bash -c "echo '$USER   ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers"
-		docker exec -ti $USER-debian-$i /bin/bash -c "service ssh start"
+	    docker exec -ti $USER-debian-$i bash -c "chmod 600 ${HOME}/.ssh/authorized_keys && chown $USER:$USER $HOME/.ssh/authorized_keys"
+		docker exec -ti $USER-debian-$i bash -c "echo '$USER   ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers"
+		docker exec -ti $USER-debian-$i bash -c "service ssh start"
 		echo "Conteneur $USER-debian-$i créé"
 	done
 	infosNodes	
@@ -62,7 +62,7 @@ startNodes(){
 	echo ""
 	docker start $(docker ps -a | grep $USER-debian | awk '{print $1}')
   for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
-		docker exec -ti $conteneur /bin/bash -c "service ssh start"
+		docker exec -ti $conteneur bash -c "service ssh start"
   done
 	echo ""
 }
