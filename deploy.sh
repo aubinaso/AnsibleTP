@@ -42,6 +42,7 @@ createNodes() {
 		docker exec -ti $USER-debian-$i bash -c "useradd -m -p sa3tHJ3/KuYvI $USER"
         docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config"
         docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config"
+        docker exec -ti $mainuser-debian-$i bash -c  "sed -i 's/.*stretch-back.*$//' /etc/apt/sources.list"
 		docker exec -ti $USER-debian-$i bash -c "mkdir  ${HOME}/.ssh && chmod 700 ${HOME}/.ssh && chown $USER:$USER $HOME/.ssh"
 	    docker cp $HOME/.ssh/id_rsa.pub $USER-debian-$i:$HOME/.ssh/authorized_keys
 	    docker exec -ti $USER-debian-$i bash -c "chmod 600 ${HOME}/.ssh/authorized_keys && chown $USER:$USER $HOME/.ssh/authorized_keys"
