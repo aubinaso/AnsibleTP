@@ -7,3 +7,5 @@ php_packages:
   - php-gd
   - php-intl
   - php-xml
+  - tar
+  - unzip

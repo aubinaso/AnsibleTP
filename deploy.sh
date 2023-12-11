@@ -96,10 +96,11 @@ createAnsible(){
     	#docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
 		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
 		echo "ansible_user: $USER" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
+        echo "ansible_fqdn: $USER-debian-$value" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
         srv=$(docker inspect -f '{{.NetworkSettings.IPAddress }}' $conteneur)
         ssh $srv sed -i 's/.*stretch-back.*$//' /etc/apt/sources.list
   	done
-  	mkdir -p $ANSIBLE_DIR/host_vars
+  	mkdir -p $ANSIBLE_DIR/host_vars/
   	mkdir -p $ANSIBLE_DIR/group_vars
 	echo "ansible_user: $USER" > $ANSIBLE_DIR/group_vars/all.yml
   	mkdir -p $ANSIBLE_DIR/roles

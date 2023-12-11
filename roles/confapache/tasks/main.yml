@@ -10,11 +10,21 @@
 - name: mediawiki archive download
   unarchive:
     src: "{{ mediawiki_archive_url }}"
-    dest: "{{ mediawiki_directory }}"
+    dest: "{{ apache_dir }}"
     remote_src: yes
     owner: "www-data"
     group: "www-data"
-    extra_opts: --transform='s/mediawiki-[0-9\.]*\///
+    #extra_opts: --transform='s/mediawiki-[0-9\.]*\///
+
+- name: mediawiki create directory
+  file:
+    path: "{{ mediawiki_directory }}"
+    state: directory
+    owner: "www-data"
+    group: "www-data"
+
+- name: mediawiki modify directory
+  command: "cp -r {{ apache_dir }}/mediawiki-1.37.1/* {{ mediawiki_directory }}"
 
 - name: add g+w sur le repertoire mediawiki
   command: "chmod -R g+w {{ mediawiki_directory }}"
