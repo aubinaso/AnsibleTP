@@ -73,13 +73,21 @@ createAnsible(){
   	ANSIBLE_DIR="ansible_dir"
   	mkdir -p $ANSIBLE_DIR
 	mkdir -p $ANSIBLE_DIR/host_vars
-  	mkdir -p $ANSIBLE_DIR/group_vars
+    mkdir -p $ANSIBLE_DIR/group_vars/apache
+    mkdir -p $ANSIBLE_DIR/group_vars/mariadb
+    touch  $ANSIBLE_DIR/group_vars/apache/main.yml
+    touch  $ANSIBLE_DIR/group_vars/mariadb/main.yml
   	mkdir -p $ANSIBLE_DIR/roles
   	touch $ANSIBLE_DIR/ansible.cfg
   	echo "all:" > $ANSIBLE_DIR/00_inventory.yml
 	echo "  vars:" >> $ANSIBLE_DIR/00_inventory.yml
     echo "    ansible_python_interpreter: /usr/bin/python3" >> $ANSIBLE_DIR/00_inventory.yml
-  	echo "  hosts:" >> $ANSIBLE_DIR/00_inventory.yml
+  	echo "  children:" >> $ANSIBLE_DIR/00_inventory.yml
+    echo "    apache:" >> $ANSIBLE_DIR/00_inventory.yml
+    echo "      hosts:" >> $ANSIBLE_DIR/00_inventory.yml
+    echo "    mariadb:" >> $ANSIBLE_DIR/00_inventory.yml
+    echo "      hosts:" >> $ANSIBLE_DIR/00_inventory.yml
+    echo "  hosts:" >> $ANSIBLE_DIR/00_inventory.yml
 	value=0
   	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
 		value=$(($value + 1))

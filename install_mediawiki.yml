@@ -10,3 +10,15 @@
   gather_facts: no
   roles:
     - role: mariadb
+
+- name: mediawiki db configuration
+  hosts: mariadb
+  gather_facts: no
+  roles:
+    - role: confdb
+
+- name: mediawiki apache configuration
+  hosts: apache
+  gather_facts: no
+  roles:
+    - role: confapache
