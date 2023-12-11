@@ -103,13 +103,21 @@ configureSSH(){
 	echo "Configuration de SSH"
 	echo ""
 	apt-get install sshpass
+	echo ""
+	echo "Installation de sshpass"
+	echo ""
 	ssh-keygen -b 2048 -t rsa -f $HOME/.ssh/id_rsa -q -N ''
 	eval `ssh-agent`
 	ssh-add
+	echo ""
+	echo "Install key on containers"
 	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
 		srv=$(docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur)
+		echo "Install key on $srv"
 		sshpass -p 'vagrant' ssh-copy-id -o StrictHostKeyChecking=no $USER@$srv 
 	done
+	echo ""
+	echo "Fin de la configuration de SSH"
 	echo ""
 
 }
