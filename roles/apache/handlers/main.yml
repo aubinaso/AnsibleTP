@@ -2,7 +2,7 @@
 # handlers file for roles/apache
 - name: enable apache2
   shell:
-    command: systemctl enable apache2
+    cmd: systemctl enable apache2
 
 - name: restart apache2
   service:
