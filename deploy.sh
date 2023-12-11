@@ -28,40 +28,38 @@ createNodes() {
 	min=1
 	max=0
 
-	mainuser=$USER
+
 	# récupération de idmax
-	idmax=`docker ps -a --format '{{ .Names}}' | awk -F "-" -v user="$mainuser" '$0 ~ user"-debian" {print $3}' | sort -r |head -1`
+	idmax=`docker ps -a --format '{{ .Names}}' | awk -F "-" -v user="$USER" '$0 ~ user"-debian" {print $3}' | sort -r |head -1`
 	# redéfinition de min et max
 	min=$(($idmax + 1))
 	max=$(($idmax + $nb_machine))
 
-	password="aubin"
-	ssh-keygen -b 2048 -t rsa -f $HOME/.ssh/id_rsa -q -N ''
 
 	# lancement des conteneurs
 	for i in $(seq $min $max);do
-		docker run -tid --privileged --publish-all=true -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $mainuser-debian-$i -h $mainuser-debian-$i priximmo/buster-systemd-ssh
-		docker exec -ti $mainuser-debian-$i /bin/sh -c "useradd -m -p $password $mainuser"
-		docker exec -ti $mainuser-debian-$i /bin/sh -c "mkdir  ${HOME}/.ssh && chmod 700 ${HOME}/.ssh && chown $mainuser:$mainuser $HOME/.ssh"
-		docker cp $HOME/.ssh/id_rsa.pub $mainuser-debian-$i:$HOME/.ssh/authorized_keys
-		docker exec -ti $mainuser-debian-$i /bin/sh -c "chmod 600 ${HOME}/.ssh/authorized_keys && chown $mainuser:$mainuser $HOME/.ssh/authorized_keys"
-		docker exec -ti $mainuser-debian-$i /bin/sh -c "echo '$mainuser   ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers"
-		docker exec -ti $mainuser-debian-$i /bin/sh -c "service ssh start"
-		echo "Conteneur $mainuser-debian-$i créé"
+		docker run -tid --privileged --publish-all=true -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
+		docker exec -ti $USER-debian-$i /bin/sh -c "useradd -m -p aubin $USER"
+		docker exec -ti $USER-debian-$i /bin/sh -c "mkdir  ${HOME}/.ssh && chmod 700 ${HOME}/.ssh && chown $USER:$USER $HOME/.ssh"
+	docker cp $HOME/.ssh/id_rsa.pub $USER-debian-$i:$HOME/.ssh/authorized_keys
+	docker exec -ti $USER-debian-$i /bin/sh -c "chmod 600 ${HOME}/.ssh/authorized_keys && chown $USER:$USER $HOME/.ssh/authorized_keys"
+		docker exec -ti $USER-debian-$i /bin/sh -c "echo '$USER   ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers"
+		docker exec -ti $USER-debian-$i /bin/sh -c "service ssh start"
+		echo "Conteneur $USER-debian-$i créé"
 	done
 	infosNodes	
 }
 
 dropNodes(){
 	echo "Suppression des conteneurs..."
-	docker rm -f $(docker ps -a | grep $mainuser-debian | awk '{print $1}')
+	docker rm -f $(docker ps -a | grep $USER-debian | awk '{print $1}')
 	echo "Fin de la suppression"
 }
 
 startNodes(){
 	echo ""
-	docker start $(docker ps -a | grep $mainuser-debian | awk '{print $1}')
-  for conteneur in $(docker ps -a | grep $mainuser-debian | awk '{print $1}');do
+	docker start $(docker ps -a | grep $USER-debian | awk '{print $1}')
+  for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
 		docker exec -ti $conteneur /bin/sh -c "service ssh start"
   done
 	echo ""
@@ -80,17 +78,17 @@ createAnsible(){
     echo "    ansible_python_interpreter: /usr/bin/python3" >> $ANSIBLE_DIR/00_inventory.yml
   	echo "  hosts:" >> $ANSIBLE_DIR/00_inventory.yml
 	value=0
-  	for conteneur in $(docker ps -a | grep $mainuser-debian | awk '{print $1}');do
+  	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
 		value=$(($value + 1))
-		echo "    $mainuser-debian-$value:" >> $ANSIBLE_DIR/00_inventory.yml
-		mkdir -p $ANSIBLE_DIR/host_vars/$mainuser-debian-$value
+		echo "    $USER-debian-$value:" >> $ANSIBLE_DIR/00_inventory.yml
+		mkdir -p $ANSIBLE_DIR/host_vars/$USER-debian-$value
     	#docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
-		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$mainuser-debian-$value/main.yml
-		echo "ansible_user: $mainuser" >> $ANSIBLE_DIR/host_vars/$mainuser-debian-$value/main.yml
+		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
+		echo "ansible_user: $USER" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
   	done
   	mkdir -p $ANSIBLE_DIR/host_vars
   	mkdir -p $ANSIBLE_DIR/group_vars
-	echo "ansible_user: $mainuser" > $ANSIBLE_DIR/group_vars/all.yml
+	echo "ansible_user: $USER" > $ANSIBLE_DIR/group_vars/all.yml
   	mkdir -p $ANSIBLE_DIR/roles
   	touch $ANSIBLE_DIR/ansible.cfg
   	echo "[defaults]" > $ANSIBLE_DIR/ansible.cfg
@@ -104,7 +102,7 @@ configureSSH(){
 	echo ""
 	echo "Configuration de SSH"
 	echo ""
-	apt-get -y install sshpass
+	apt-get install sshpass
 	echo ""
 	echo "Installation de sshpass"
 	echo ""
@@ -113,10 +111,10 @@ configureSSH(){
 	ssh-add
 	echo ""
 	echo "Install key on containers"
-	for conteneur in $(docker ps -a | grep $mainuser-debian | awk '{print $1}');do
-		srv=$(docker inspect -f '{{.NetworkSettings.IPAddress }}' $conteneur)
-		echo "First container : $srv"
-		sshpass -p 'vagrant' ssh-copy-id -o StrictHostKeyChecking=no $mainuser@$srv 
+	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
+		srv=$(docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur)
+		echo "Install key on $srv"
+		sshpass -p 'vagrant' ssh-copy-id -o StrictHostKeyChecking=no $USER@$srv 
 	done
 	echo ""
 	echo "Fin de la configuration de SSH"
@@ -128,7 +126,7 @@ infosNodes(){
 	echo ""
 	echo "Informations des conteneurs : "
 	echo ""
-	for conteneur in $(docker ps -a | grep $mainuser-debian | awk '{print $1}');do      
+	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do      
 		docker inspect -f '   => {{.Name}} - {{.NetworkSettings.IPAddress }}' $conteneur
 	done
 	echo ""
