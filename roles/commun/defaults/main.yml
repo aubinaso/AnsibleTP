@@ -1,6 +1,6 @@
 ---
 # defaults file for roles/commun
-madiawiki_db_user: "mediawiki"
+mediawiki_db_user: "mediawiki"
 mediawiki_db_name: "mediawiki"
 mediawiki_db_password: "mediawiki" # ceci est à configurer
 
