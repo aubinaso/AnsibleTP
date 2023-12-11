@@ -1,0 +1,5 @@
+- name: mediawiki apache configuration
+  hosts: apache
+  gather_facts: no
+  roles:
+    - role: confapache2
