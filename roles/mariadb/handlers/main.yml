@@ -1,9 +1,8 @@
 ---
 # handlers file for roles/mariadb
 - name: enable mariadb
-  service:
-    name: mariadb
-    state: enabled
+  shell:
+    command: systemctl enable mariadb
 
 - name: restart mariadb
   service:
