@@ -12,4 +12,4 @@
     priv: "{{ mediawiki_db_name }}.*:ALL"
     state: present
     host: "{{ item }}"
-    with_items: "{{ groups.apache }}" # à configurer
+  with_items: "{{ groups.apache }}" # à configurer
