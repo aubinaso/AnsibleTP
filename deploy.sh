@@ -88,7 +88,7 @@ createAnsible(){
     	#docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
 		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
 		echo "ansible_user: $USER" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
-        srv=$(docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur)
+        srv=$(docker inspect -f '{{.NetworkSettings.IPAddress }}' $conteneur)
         ssh $srv sed -i 's/.*stretch-back.*$//' /etc/apt/sources.list
   	done
   	mkdir -p $ANSIBLE_DIR/host_vars
@@ -117,7 +117,7 @@ configureSSH(){
 	echo ""
 	echo "Install key on containers"
 	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
-		srv=$(docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur)
+		srv=$(docker inspect -f '{{.NetworkSettings.IPAddress }}' $conteneur)
 		echo "Install key on $srv"
 		sshpass -p 'vagrant' ssh-copy-id -o StrictHostKeyChecking=no $USER@$srv 
 	done
