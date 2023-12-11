@@ -76,7 +76,7 @@ createAnsible(){
     mkdir -p $ANSIBLE_DIR/group_vars/apache
     mkdir -p $ANSIBLE_DIR/group_vars/mariadb
 	echo "ansible_user: $USER" > $ANSIBLE_DIR/group_vars/all.yml
-    echo "ansible_host_list: $USER" >> $ANSIBLE_DIR/group_vars/all.yml
+    echo "ansible_host_list:" >> $ANSIBLE_DIR/group_vars/all.yml
     touch  $ANSIBLE_DIR/group_vars/apache/main.yml
     touch  $ANSIBLE_DIR/group_vars/mariadb/main.yml
   	mkdir -p $ANSIBLE_DIR/roles
