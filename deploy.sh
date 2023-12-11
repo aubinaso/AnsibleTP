@@ -76,7 +76,7 @@ createAnsible(){
     mkdir -p $ANSIBLE_DIR/group_vars/apache
     mkdir -p $ANSIBLE_DIR/group_vars/mariadb
 	echo "ansible_user: $USER" > $ANSIBLE_DIR/group_vars/all.yml
-    echo "ansible_host_list: $USER" > $ANSIBLE_DIR/group_vars/all.yml
+    echo "ansible_host_list: $USER" >> $ANSIBLE_DIR/group_vars/all.yml
     touch  $ANSIBLE_DIR/group_vars/apache/main.yml
     touch  $ANSIBLE_DIR/group_vars/mariadb/main.yml
   	mkdir -p $ANSIBLE_DIR/roles
@@ -100,7 +100,7 @@ createAnsible(){
 		echo "ansible_user: $USER" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
         echo "ansible_fqdn: $USER-debian-$value" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
         srv=$(docker inspect -f '{{.NetworkSettings.IPAddress }}' $conteneur)
-        echo "- $srv" > $ANSIBLE_DIR/group_vars/all.yml
+        echo "- $srv" >> $ANSIBLE_DIR/group_vars/all.yml
         ssh $srv sed -i 's/.*stretch-back.*$//' /etc/apt/sources.list
   	done
   	mkdir -p $ANSIBLE_DIR/host_vars/
