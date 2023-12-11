@@ -1,0 +1,7 @@
+- name: Mon Playbook
+  hosts: all
+  tasks:
+  - name: Afficher le hostname
+    debug:
+      msg: "Le hostname est {{ inventory_hostname }}"
+  
