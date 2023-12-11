@@ -15,6 +15,8 @@ Options :
 
 		- --ansible : déploiement arborescence ansible
 
+		- --configureSSH : configuration de SSH and install key to the remote server
+
 "
 }
 
@@ -139,6 +141,10 @@ elif [ "$1" == "--start" ];then
 # si option --ansible
 elif [ "$1" == "--ansible" ];then
 	createAnsible
+
+# si option --configureSSH
+elif [ "$1" == "--configureSSH" ];then
+	configureSSH
 
 # si option --infos
 elif [ "$1" == "--infos" ];then
