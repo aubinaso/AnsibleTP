@@ -50,4 +50,4 @@
     chdir: "{{ mediawiki_maintenance_directory }}"
   run_once: yes
   register: resultat
-  changed_when: "' ...done." in resultat.stdout
+  changed_when: "' ...done.' in resultat.stdout"
