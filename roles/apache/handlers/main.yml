@@ -5,6 +5,5 @@
     cmd: systemctl enable apache2
 
 - name: restart apache2
-  service:
-    name: apache2
-    state: started
+  shell:
+    cmd: systemctl start apache2

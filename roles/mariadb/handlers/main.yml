@@ -5,6 +5,5 @@
     cmd: systemctl enable mariadb
 
 - name: restart mariadb
-  service:
-    name: mariadb
-    state: started
+  shell:
+    cmd: systemctl start mariadb
