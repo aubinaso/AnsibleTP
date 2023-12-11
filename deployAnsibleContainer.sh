@@ -35,7 +35,7 @@ createNodes() {
 	min=$(($idmax + 1))
 	max=$(($idmax + $nb_machine))
 
-	password="aubin"
+	password="sa3tHJ3/KuYvI"
 	ssh-keygen -b 2048 -t rsa -f $HOME/.ssh/id_rsa -q -N ''
 
 	# lancement des conteneurs
