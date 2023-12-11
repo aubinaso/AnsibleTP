@@ -15,4 +15,5 @@
     update_cache: yes
   with_items: "{{ php_packages }}"
   notify:
+    - enable apache2
     - restart apache2
