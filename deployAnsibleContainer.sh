@@ -86,6 +86,7 @@ createAnsible(){
   	done
   	mkdir -p $ANSIBLE_DIR/host_vars
   	mkdir -p $ANSIBLE_DIR/group_vars
+	echo "ansible_user: $USER" > $ANSIBLE_DIR/group_vars/all.yml
   	mkdir -p $ANSIBLE_DIR/roles
   	touch $ANSIBLE_DIR/ansible.cfg
   	echo "[defaults]" > $ANSIBLE_DIR/ansible.cfg
