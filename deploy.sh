@@ -93,17 +93,24 @@ createAnsible(){
 	value=0
   	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
 		value=$(($value + 1))
-		echo "    $USER-debian-$value:" >> $ANSIBLE_DIR/00_inventory.yml
-		mkdir -p $ANSIBLE_DIR/host_vars/$USER-debian-$value
+		echo "    $server_name:" >> $ANSIBLE_DIR/00_inventory.yml
+        server_name=$(docker inspect -f 'ansible_host: {{.Config.Hostname }}' $conteneur)
+		mkdir -p $ANSIBLE_DIR/host_vars/$server_name
     	#docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
-		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
-		echo "ansible_user: $USER" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
-        echo "ansible_fqdn: $USER-debian-$value" >> $ANSIBLE_DIR/host_vars/$USER-debian-$value/main.yml
+		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$server_name/main.yml
+		echo "ansible_user: $USER" >> $ANSIBLE_DIR/host_vars/$server_name/main.yml
+        echo "ansible_fqdn: $server_name" >> $ANSIBLE_DIR/host_vars/$server_name/main.yml
         srv=$(docker inspect -f '{{.NetworkSettings.IPAddress }}' $conteneur)
         echo "- $srv" >> $ANSIBLE_DIR/group_vars/all.yml
         ssh $srv sed -i 's/.*stretch-back.*$//' /etc/apt/sources.list
+        echo "$srv $server_name" >> file.txt
   	done
-  	mkdir -p $ANSIBLE_DIR/host_vars/
+    for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
+        server_name=$(docker inspect -f 'ansible_host: {{.Config.Hostname }}' $conteneur)
+        docker cp ./file.txt $server_name:$HOME/
+        docker exec -ti $server_name bash -c  "cat $HOME/file.txt >> /etc/hosts"
+        rm file.txt
+    done
   	mkdir -p $ANSIBLE_DIR/roles
   	touch $ANSIBLE_DIR/ansible.cfg
   	echo "[defaults]" > $ANSIBLE_DIR/ansible.cfg
