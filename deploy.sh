@@ -34,12 +34,12 @@ createNodes() {
 	# redéfinition de min et max
 	min=$(($idmax + 1))
 	max=$(($idmax + $nb_machine))
-
+    port=8080
 
 	# lancement des conteneurs
 	for i in $(seq $min $max);do
 		#docker run -tid --privileged --publish-all=true -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
-        docker run -tid --privileged -p 8080:80  -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
+        docker run -tid --privileged -p $port:80  -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
 		docker exec -ti $USER-debian-$i bash -c "useradd -m -p sa3tHJ3/KuYvI $USER"
         docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config"
         docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config"
@@ -50,6 +50,7 @@ createNodes() {
 		docker exec -ti $USER-debian-$i bash -c "echo '$USER   ALL=(ALL) NOPASSWD: ALL'>>/etc/sudoers"
 		docker exec -ti $USER-debian-$i bash -c "service ssh start"
 		echo "Conteneur $USER-debian-$i créé"
+        port=$(($port + 1))
 	done
 	infosNodes	
 }
