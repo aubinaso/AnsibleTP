@@ -47,7 +47,6 @@
       --dbpass "{{ mediawiki_db_password }}"
       --installdbuser "{{ mediawiki_db_user }}"
       --installdbpass "{{ mediawiki_db_password }}"
-      #--server "http://{{ ansible_fqdn }}"
       --server "http://0.0.0.0"
       --scriptpath "/{{ mediawiki_name }}"
       --lang "fr"
@@ -55,6 +54,7 @@
       "{{ mediawiki_title }}"
       "{{ mediawiki_admin_user }}"
   run_once: yes
+  #--server "http://{{ ansible_fqdn }}"
   delegate_to: "{{ item }}"
   with_items: "{{ groups.apache }}"
 
