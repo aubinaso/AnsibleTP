@@ -94,7 +94,7 @@ createAnsible(){
   	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
 		value=$(($value + 1))
 		echo "    $server_name:" >> $ANSIBLE_DIR/00_inventory.yml
-        server_name=$(docker inspect -f 'ansible_host: {{.Config.Hostname }}' $conteneur)
+        server_name=$(docker inspect -f '{{.Config.Hostname }}' $conteneur)
 		mkdir -p $ANSIBLE_DIR/host_vars/$server_name
     	#docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
 		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$server_name/main.yml
@@ -106,7 +106,7 @@ createAnsible(){
         echo "$srv $server_name" >> file.txt
   	done
     for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
-        server_name=$(docker inspect -f 'ansible_host: {{.Config.Hostname }}' $conteneur)
+        server_name=$(docker inspect -f '{{.Config.Hostname }}' $conteneur)
         docker cp ./file.txt $server_name:$HOME/
         docker exec -ti $server_name bash -c  "cat $HOME/file.txt >> /etc/hosts"
         rm file.txt
