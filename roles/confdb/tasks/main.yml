@@ -16,12 +16,12 @@
   with_items:
   - "{{ ansible_host_list }}"
 
-- name: Create user for hosts
-  shell:
-    cmd: "mysql -u root  -e \"CREATE USER '{{ mediawiki_db_user }}'@'{{ item }}' IDENTIFIED BY '{{ mediawiki_db_password }}'\""
-  with_items: "{{ ansible_host_list }}"
+#- name: Create user for hosts
+#  shell:
+#    cmd: "mysql -u root  -e \"CREATE USER '{{ mediawiki_db_user }}'@'{{ item }}' IDENTIFIED BY '{{ mediawiki_db_password }}'\""
+#  with_items: "{{ ansible_host_list }}"
 
-- name: Give access
-  shell:
-    cmd: "mysql -u root  -e \"Grant All Privileges ON *.* to '{{ mediawiki_db_user }}'@'{{ item }}' Identified By '{{ mediawiki_db_password }}'\""
-  with_items: "{{ ansible_host_list }}"
+#- name: Give access
+#  shell:
+#    cmd: "mysql -u root  -e \"Grant All Privileges ON *.* to '{{ mediawiki_db_user }}'@'{{ item }}' Identified By '{{ mediawiki_db_password }}'\""
+#  with_items: "{{ ansible_host_list }}"
