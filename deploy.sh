@@ -92,9 +92,8 @@ createAnsible(){
     echo "  hosts:" >> $ANSIBLE_DIR/00_inventory.yml
 	value=0
   	for conteneur in $(docker ps -a | grep $USER-debian | awk '{print $1}');do
-		value=$(($value + 1))
-		echo "    $server_name:" >> $ANSIBLE_DIR/00_inventory.yml
-        server_name=$(docker inspect -f '{{.Config.Hostname }}' $conteneur)
+		server_name=$(docker inspect -f '{{.Config.Hostname }}' $conteneur)
+        echo "    $server_name:" >> $ANSIBLE_DIR/00_inventory.yml
 		mkdir -p $ANSIBLE_DIR/host_vars/$server_name
     	#docker inspect -f '    {{.NetworkSettings.IPAddress }}:' $conteneur >> $ANSIBLE_DIR/00_inventory.yml
 		docker inspect -f 'ansible_host: {{.NetworkSettings.IPAddress }}' $conteneur >> $ANSIBLE_DIR/host_vars/$server_name/main.yml
