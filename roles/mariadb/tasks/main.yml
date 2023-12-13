@@ -3,16 +3,17 @@
 
 # ici je définis les tâches qui seront exécutées par le role mariadb
 - name: Installation des paquets mariadb
-  apt:
+  apt: # le module apt permet d'installer des paquets
     name: "{{ item }}"
     state: latest
     update_cache: yes
-  with_items: "{{ mariadb_packages }}"
+  with_items: "{{ mariadb_packages }}" # je fais une boucle sur la variable "mariadb_packages" définie dans le fichier defaults/main.yml
   notify:
     - restart mariadb
 
+# la tâche suivante permet d'exécuter une commande sur le serveur distant
 - name: Configuration du serveur mariadb
   command: sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
-  notify:
+  notify: # permet d'appeler des handlers, ici j'appelle le handlers "restart mariadb" et "enable mariadb"
     - enable mariadb
     - restart mariadb

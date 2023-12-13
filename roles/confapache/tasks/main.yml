@@ -3,30 +3,33 @@
 
 # ici je définis les tâches qui seront exécutées par le role confapache
 - name: mediawiki directory
-  file:
+  file: # le module file permet de créer un répertoire ou un fichier, dans ce cas c'est un repertoire.
     path: "{{ mediawiki_directory }}"
     state: directory
     owner: "www-data"
     group: "www-data"
 
 - name: mediawiki archive download
-  unarchive:
+  unarchive: # le module unarchive permet de décompresser une fichier compressé
     src: "{{ mediawiki_archive_url }}"
     dest: "{{ apache_dir }}"
     remote_src: yes
     owner: "www-data"
     group: "www-data"
-    #extra_opts: --transform='s/mediawiki-[0-9\.]*\///
 
 - name: mediawiki modify directory
-  shell: 
+  shell:  # le module shell permet d'exécuter des commandes shell
     cmd: "{{ item }}"
   with_items:
     - "mkdir {{ mediawiki_directory }}"
     - "cp -r {{ apache_dir }}/mediawiki-1.37.1/* {{ mediawiki_directory }}"
 
+- name: pause for 30 seconds
+  pause: # le module pause permet de mettre en pause l'exécution du playbook
+    seconds: 30
+
 - name: mediawiki rigths to www-data
-  file:
+  file: # le module file permet de créer un répertoire ou un fichier, dans ce cas, le repertoire existant, je change les droits.
     path: "{{ mediawiki_directory }}"
     state: directory
     owner: "www-data"
@@ -38,7 +41,7 @@
 
 - name: mediawiki config file
   become: yes
-  args:
+  args: # le module args permet de passer des arguments à une commande
     chdir: "{{ mediawiki_maintenance_directory }}"
     creates: "{{ mediawiki_directory }}/LocalSettings.php"
   command:
@@ -55,10 +58,9 @@
       --pass "{{ mediawiki_db_password }}"
       "{{ mediawiki_title }}"
       "{{ mediawiki_admin_user }}"
-  run_once: yes
-  #--server "http://{{ ansible_fqdn }}:{{ port }}"
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups.apache }}"
+  run_once: yes # permet de n'exécuter la tâche qu'une seule fois
+  delegate_to: "{{ item }}" # permet d'exécuter la tâche sur un hôte spécifique
+  with_items: "{{ groups.apache }}" # je fais une boucle sur le groupe de serveur 'apache'
 
 - name: mediawiki db update
   become: yes

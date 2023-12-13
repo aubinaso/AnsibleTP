@@ -3,17 +3,17 @@
 
 # ici je définis les tâches qui seront exécutées par le role confdb
 - name: mediawiki database creation
-  mysql_db:
+  mysql_db: # le module mysql_db permet de créer une base de données
     name: "{{ mediawiki_db_name }}"
     state: present
 
 - name: mediawiki user creation and privileges
-  mysql_user:
+  mysql_user: # le module mysql_user permet de créer un utilisateur et de lui donner des privilèges
     name: "{{ mediawiki_db_user }}"
     password: "{{ mediawiki_db_password }}"
     #priv: "{{ mediawiki_db_name }}.*:ALL"
     priv: "*.*:ALL"
     state: present
     host: "{{ item }}"
-  with_items:
+  with_items: # je fais une boucle sur la variable "ansible_host_list" définie dans le fichier inventory
   - "{{ ansible_host_list }}"
