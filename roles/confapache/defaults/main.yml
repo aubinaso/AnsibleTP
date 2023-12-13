@@ -1,2 +1,4 @@
 ---
 # defaults file for roles/confapache
+
+# les variables définies dans ce fichier sont utilisées par le role mariadb

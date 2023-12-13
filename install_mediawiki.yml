@@ -1,9 +1,11 @@
+# cette tâche permet d'executer le role apache sur les serveurs du groupe apache
 - name: Install apache
   hosts: apache
   become: yes
   roles:
     - role: apache
 
+# cette tâche permet d'executer le role mariadb sur les serveurs du groupe mariadb
 - name: install mariadb
   hosts: mariadb
   become: yes
@@ -11,12 +13,14 @@
   roles:
     - role: mariadb
 
+# cette tâche permet d'executer le role confdb sur les serveurs du groupe mariadb
 - name: mediawiki db configuration
   hosts: mariadb
   gather_facts: no
   roles:
     - role: confdb
 
+# cette tâche permet d'executer le role confapache sur les serveurs du groupe apache
 - name: mediawiki apache configuration
   hosts: apache
   gather_facts: no

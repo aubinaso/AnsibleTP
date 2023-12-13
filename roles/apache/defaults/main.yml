@@ -1,5 +1,7 @@
 ---
 # defaults file for roles/apache
+
+# les variables définies dans ce fichier sont utilisées par le role apache
 php_packages:
   - php
   - php-mysql

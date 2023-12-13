@@ -1,18 +1,18 @@
-- name: Mon Playbook
-  hosts: all
+- name: Mon Playbook # le nom de la tâche
+  hosts: all # j'execute ce playbook sur tous les serveurs
   tasks:
   - name: Afficher le hostname
-    debug:
-      msg: "Le hostname est {{ inventory_hostname }}"
+    debug: # le module debug permet d'afficher des messages
+      msg: "Le hostname est {{ inventory_hostname }}" # ici j'affiche le hostname de la machine distante
 
 - name: Create a directory
   hosts: all
-  become: yes
+  become: yes # permet de passer en mode privilégié
   tasks:
   - name: Create a directory
-    file:
+    file: # le module file permet de créer des fichiers ou des répertoires
       path: "/home/{{ myuser }}/myDir"
-      state: directory
+      state: directory # je crée un répertoire
       mode: 0755
       owner: "{{ myuser }}"
   

@@ -1,2 +1,4 @@
 ---
 # defaults file for roles/confdb
+
+# les variables définies dans ce fichier sont utilisées par le role mariadb
