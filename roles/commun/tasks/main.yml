@@ -1,2 +1,4 @@
 ---
 # tasks file for roles/commun
+
+# ici je définis les tâches qui seront exécutées par le role commun

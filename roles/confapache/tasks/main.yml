@@ -1,5 +1,7 @@
 ---
 # tasks file for roles/confapache
+
+# ici je définis les tâches qui seront exécutées par le role confapache
 - name: mediawiki directory
   file:
     path: "{{ mediawiki_directory }}"

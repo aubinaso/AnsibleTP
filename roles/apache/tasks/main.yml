@@ -1,11 +1,13 @@
 ---
 # tasks file for roles/apache
+
+# ici je définis les tâches qui seront exécutées par le role apache
 - name: Installation du packet Apache
-  apt:
+  apt: # le module apt permet d'installer des paquets
     name: apache2
     state: latest
-    update_cache: yes
-  notify:
+    update_cache: yes # permet de mettre à jour le cache des paquets
+  notify: # permet d'appeler des handlers, ici j'appelle le handlers "restart apache2"
     - restart apache2
 
 - name: Install PHP packages

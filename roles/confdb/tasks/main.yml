@@ -1,5 +1,7 @@
 ---
 # tasks file for roles/confdb
+
+# ici je définis les tâches qui seront exécutées par le role confdb
 - name: mediawiki database creation
   mysql_db:
     name: "{{ mediawiki_db_name }}"

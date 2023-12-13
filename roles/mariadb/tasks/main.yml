@@ -1,5 +1,7 @@
 ---
 # tasks file for roles/mariadb
+
+# ici je définis les tâches qui seront exécutées par le role mariadb
 - name: Installation des paquets mariadb
   apt:
     name: "{{ item }}"
