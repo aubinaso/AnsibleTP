@@ -7,7 +7,7 @@ general = {
   subnet_prefix        = ["10.0.1.0/24"]
   subnet_name          = "testsubnet"
 
-  virtual_machine_name = "testaubin"
+  virtual_machine_name = "testubuntu"
   virtual_machine_size = "Standard_D2s_v3"
 
   credentials = {
