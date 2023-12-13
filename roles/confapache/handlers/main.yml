@@ -1,2 +1,4 @@
 ---
 # handlers file for roles/confapache
+
+# les handlers sont des actions qui sont executés grâce à des triggers. Il se déclare comme des tasks et on l'appel dans les tasks avec "notify"
