@@ -1,6 +1,3 @@
-# We strongly recommend using the required_providers block to set the
-# Azure Provider source and version being used
-
 terraform {
   required_providers {
     azurerm = {
@@ -10,11 +7,10 @@ terraform {
   }
 }
 
-# Configure the Microsoft Azure Provider
 provider "azurerm" {
-  client_id = ""
-  client_secret = ""
-  subscription_id = ""
-  tenant_id = ""
+  client_id = "" # renseigner la valeur de votre id d'application
+  client_secret = "" # renseigner la valeur de votre secret d'application
+  subscription_id = "" # renseigner la valeur de votre id d'abonnement
+  tenant_id = "" # renseigner la valeur de l'id du tenant
   features {}
 }

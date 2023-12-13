@@ -1,5 +1,5 @@
 general = {
-  rg_name  = "RG-AUBIN"
+  rg_name  = "RG-AUBIN" # changer le nom de votre groupe de resource
   location = "North Europe"
 
   virtual_network_name = "testvnet"
@@ -11,7 +11,7 @@ general = {
   virtual_machine_size = "Standard_D2s_v3"
 
   credentials = {
-    username = "aubin"
-    password = "P@ssw0rd1234P@ssw0rd1234P@ssw0rd1234"
+    username = "aubin" # vous pouvez renseigneur un nouveau nom d'utilisateur
+    password = "P@ssw0rd1234P@ssw0rd1234P@ssw0rd1234" # vous pouvez renseigneur un nouveau mot de passe
   }
 }
