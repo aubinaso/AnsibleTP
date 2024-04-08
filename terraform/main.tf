@@ -23,4 +23,5 @@ module "virtual_machine" {
   virtual_machine_name = "${var.general.virtual_machine_name}-${count.index}"
   virtual_machine_size = var.general.virtual_machine_size
   credentials          = var.general.credentials
+  publicIPName          = "myPublicIp-${count.index}"
 }

@@ -25,3 +25,7 @@ variable "credentials" {
     password = string
   })
 }
+
+variable "publicIPName" {
+  type = string
+}
