@@ -1,9 +1,9 @@
 output "virtual_machine_id" {
-  value = azurerm_windows_virtual_machine.virtualmachine.id
+  value = azurerm_linux_virtual_machine.virtualmachine.id
 }
 
 output "virtual_machine_name" {
-  value = azurerm_windows_virtual_machine.virtualmachine.name
+  value = azurerm_linux_virtual_machine.virtualmachine.name
 }
 
 output "public_ip_address" {

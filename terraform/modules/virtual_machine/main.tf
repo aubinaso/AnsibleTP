@@ -18,13 +18,14 @@ resource "azurerm_public_ip" "public_ip" {
   allocation_method   = "Dynamic"
 }
 
-resource "azurerm_windows_virtual_machine" "virtualmachine" {
-  name                = var.virtual_machine_name
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  size                = var.virtual_machine_size
-  admin_username      = var.credentials.username
-  admin_password      = var.credentials.password
+resource "azurerm_linux_virtual_machine" "virtualmachine" {
+  name                            = var.virtual_machine_name
+  resource_group_name             = var.resource_group_name
+  location                        = var.location
+  size                            = var.virtual_machine_size
+  admin_username                  = var.credentials.username
+  admin_password                  = var.credentials.password
+  disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]
