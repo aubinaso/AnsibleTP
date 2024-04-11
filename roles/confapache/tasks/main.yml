@@ -21,7 +21,6 @@
   shell:  # le module shell permet d'exécuter des commandes shell
     cmd: "{{ item }}"
   with_items:
-    - "mkdir {{ mediawiki_directory }}"
     - "cp -r {{ apache_dir }}/mediawiki-1.37.1/* {{ mediawiki_directory }}"
 
 - name: pause for 30 seconds
