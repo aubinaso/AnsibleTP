@@ -11,8 +11,8 @@
   tasks:
   - name: Create a directory
     file: # le module file permet de créer des fichiers ou des répertoires
-      path: "/home/{{ myuser }}/myDir"
+      path: "/home/{{ ansible_user }}/myDir"
       state: directory # je crée un répertoire
       mode: 0755
-      owner: "{{ myuser }}"
+      owner: "{{ ansible_user }}"
   
