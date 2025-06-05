@@ -39,7 +39,7 @@ createNodes() {
 	# lancement des conteneurs
 	for i in $(seq $min $max);do
 		#docker run -tid --privileged --publish-all=true -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
-        docker run -tid --privileged -p $port:80  -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
+        docker run -tid --privileged -p $port:80  -v /srv/data:/srv/html -v /sys/fs/cgroup:/sys/fs/cgroup:rw --name $USER-debian-$i -h $USER-debian-$i priximmo/buster-systemd-ssh
 		docker exec -ti $USER-debian-$i bash -c "useradd -m -p sa3tHJ3/KuYvI $USER"
         docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config"
         docker exec -ti $mainuser-debian-$i bash -c "sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config"
