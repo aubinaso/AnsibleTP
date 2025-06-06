@@ -13,9 +13,9 @@ resource "azurerm_subnet" "subnet" {
 }
 
 resource "azurerm_network_security_group" "nsg_for_ssh" {
-  name                = "acceptanceTestSecurityGroup1"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  name                = "SSHAllowAccess"
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   security_rule {
     name                       = "AllowSSH"
